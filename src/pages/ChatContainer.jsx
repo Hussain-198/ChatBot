@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { TbMessageChatbotFilled } from "react-icons/tb";
 import MessageList from "../components/MessageList";
 import TypingIndicator from "../components/TypingIndicator";
 import ChatInput from "../components/ChatInput";
@@ -80,7 +81,7 @@ export default function ChatContainer() {
         <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] -translate-x-1/2 -translate-y-1/2 bg-gradient-radial from-white/60 to-transparent rounded-full blur-2xl" />
         {/* Subtle grid */}
         <svg
-          className="absolute inset-0 w-full h-full opacity-10"
+          className="absolute inset-0 w-full h-full"
           width="100%"
           height="100%"
         >
@@ -102,21 +103,28 @@ export default function ChatContainer() {
           <rect width="100%" height="100%" fill="url(#grid)" />
         </svg>
       </div>
-      <div className="flex flex-col w-full max-w-md h-[80vh] bg-white/80 shadow-2xl rounded-3xl border border-indigo-100/80 backdrop-blur-xl z-10 relative">
-        <header className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white p-5 font-bold text-xl flex items-center justify-between shadow-md rounded-t-3xl">
+      {/* Chat window */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 80, damping: 18 }}
+        className="flex flex-col w-full max-w-md h-[80vh] bg-[url('https://i.pinimg.com/736x/98/30/81/9830817a89e3693edb9f87c56f481448.jpg')] bg-no-repeat bg-cover bg-center shadow-2xl rounded-3xl backdrop-blur-xl z-10 relative"
+      >
+        <header className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white p-5 font-bold text-xl flex items-center justify-center shadow-md rounded-t-3xl">
+          <TbMessageChatbotFilled size={24} />
           <span className="tracking-wide">ChatBot</span>
-          <span className="text-xs font-medium opacity-80">Online</span>
+          {/* <span className="text-xs font-medium opacity-80">Online</span> */}
         </header>
-        <div className="flex-1 flex flex-col overflow-y-auto px-4 py-4 bg-white/60 rounded-b-3xl">
+        <div className="flex-1 flex flex-col overflow-y-auto px-4 py-4">
           <MessageList messages={messages} />
           <AnimatePresence>
             {isTyping && <TypingIndicator key="typing" />}
           </AnimatePresence>
         </div>
-        <div className="bg-white/80 px-3 pb-3 pt-2 border-t border-indigo-100/60 rounded-b-3xl">
+        <div className="px-3 pb-3 pt-2 border-t border-indigo-100/60 rounded-b-3xl">
           <ChatInput onSend={handleSend} />
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
