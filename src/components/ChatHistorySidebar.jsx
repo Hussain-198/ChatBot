@@ -7,7 +7,7 @@ export default function ChatHistorySidebar({
   onNewSession,
 }) {
   return (
-    <aside className="w-64 bg-white/80 border-r border-indigo-100/60 h-[80vh] rounded-l-3xl shadow-lg flex flex-col">
+    <aside className="w-64 bg-white/80 border-r border-indigo-100/60 h-full shadow-lg flex flex-col">
       <div className="p-4 border-b border-indigo-100/60 flex items-center justify-between">
         <span className="font-bold text-lg text-indigo-700">History</span>
         <button

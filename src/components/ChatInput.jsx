@@ -27,7 +27,7 @@ export default function ChatInput({ onSend }) {
   };
 
   return (
-    <div className="flex items-center gap-2 p-3  bg-white rounded-3xl">
+    <div className="flex items-center gap-2 p-3 bg-white rounded-3xl">
       <textarea
         ref={inputRef}
         className="flex-1 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm bg-gray-50 resize-none"

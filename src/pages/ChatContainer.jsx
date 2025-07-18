@@ -5,6 +5,7 @@ import MessageList from "../components/MessageList";
 import TypingIndicator from "../components/TypingIndicator";
 import ChatInput from "../components/ChatInput";
 import ChatHistorySidebar from "../components/ChatHistorySidebar";
+import { HiMenu } from "react-icons/hi";
 
 const getTodayId = () => {
   const d = new Date();
@@ -30,6 +31,7 @@ export default function ChatContainer() {
   const [isTyping, setIsTyping] = useState(false);
   const [sessionsLoaded, setSessionsLoaded] = useState(false);
   const [latestAnimatedAiId, setLatestAnimatedAiId] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Load sessions from localStorage on mount
   useEffect(() => {
@@ -157,6 +159,8 @@ export default function ChatContainer() {
 
   const handleSelectSession = (id) => {
     setSelectedSessionId(id);
+    // Auto-close sidebar on mobile
+    if (window.innerWidth < 768) setSidebarOpen(false);
   };
 
   const handleNewSession = () => {
@@ -179,7 +183,7 @@ export default function ChatContainer() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e0e7ff] via-[#f8fafc] to-[#c7d2fe] relative overflow-hidden">
+    <div className="w-screen h-screen min-h-screen flex bg-gradient-to-br from-[#e0e7ff] via-[#f8fafc] to-[#c7d2fe] relative overflow-hidden">
       {/* Dashboard-style abstract shapes */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-gradient-to-br from-blue-400/30 to-indigo-300/10 rounded-full blur-3xl" />
@@ -210,24 +214,60 @@ export default function ChatContainer() {
         </svg>
       </div>
       {/* Chat layout with sidebar */}
-      <div className="flex w-full max-w-4xl h-[80vh] bg-transparent z-10 relative rounded-3xl shadow-2xl">
-        <ChatHistorySidebar
-          sessions={sessions}
-          selectedSessionId={selectedSessionId}
-          onSelectSession={handleSelectSession}
-          onNewSession={handleNewSession}
-        />
+      <div className="flex w-full h-full bg-transparent z-10 relative">
+        {/* Sidebar for desktop, overlay for mobile */}
+        {/* Hamburger button for mobile */}
+        <button
+          className="absolute top-4 left-4 z-30 md:hidden bg-white/80 rounded-full p-2 shadow-md"
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Open sidebar"
+        >
+          <HiMenu size={24} />
+        </button>
+        {/* Sidebar overlay for mobile */}
+        <div
+          className={`fixed inset-0 bg-black/30 z-40 transition-opacity duration-300 md:hidden ${
+            sidebarOpen
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
+          }`}
+          onClick={() => setSidebarOpen(false)}
+        >
+          <div
+            className={`absolute left-0 top-0 h-full w-64 bg-white shadow-xl transition-transform duration-300 ${
+              sidebarOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ChatHistorySidebar
+              sessions={sessions}
+              selectedSessionId={selectedSessionId}
+              onSelectSession={handleSelectSession}
+              onNewSession={handleNewSession}
+              onCloseSidebar={() => setSidebarOpen(false)}
+            />
+          </div>
+        </div>
+        {/* Sidebar for desktop */}
+        <div className="hidden md:block h-full">
+          <ChatHistorySidebar
+            sessions={sessions}
+            selectedSessionId={selectedSessionId}
+            onSelectSession={handleSelectSession}
+            onNewSession={handleNewSession}
+          />
+        </div>
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 80, damping: 18 }}
-          className="flex flex-col flex-1 h-full bg-indigo-50 bg-no-repeat bg-cover bg-center rounded-r-3xl backdrop-blur-xl relative"
+          className="flex flex-col flex-1 h-full bg-indigo-50 bg-no-repeat bg-cover bg-center backdrop-blur-xl relative"
         >
-          <header className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white p-5 font-bold text-xl flex items-center justify-center shadow-md rounded-tr-3xl">
+          <header className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white p-5 font-bold text-xl flex items-center justify-center shadow-md">
             <TbMessageChatbotFilled size={24} />
-            <span className="tracking-wide">ChatBot</span>
+            <span className="tracking-wide ml-2">ChatBot</span>
           </header>
-          <div className="flex-1 flex flex-col overflow-y-auto px-4 py-4">
+          <div className="flex-1 flex flex-col overflow-y-auto px-2 sm:px-4 py-4">
             <MessageList
               messages={messages}
               latestAnimatedAiId={latestAnimatedAiId}
@@ -236,7 +276,7 @@ export default function ChatContainer() {
               {isTyping && <TypingIndicator key="typing" />}
             </AnimatePresence>
           </div>
-          <div className="px-3 pb-3 pt-2 border-t border-indigo-200/60 rounded-b-3xl">
+          <div className="px-2 sm:px-3 pb-3 pt-2 border-t border-indigo-200/60 rounded-b-3xl">
             <ChatInput onSend={handleSend} />
           </div>
         </motion.div>
