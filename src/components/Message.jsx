@@ -31,9 +31,9 @@ const bubbleVariants = {
   exit: { opacity: 0, x: -40, transition: { duration: 0.2 } },
 };
 
-export default function Message({ message }) {
+export default function Message({ message, isLatestAiMessage }) {
   const isUser = message.sender === "user";
-  const showTypewriter = !isUser;
+  const showTypewriter = isLatestAiMessage ;
   const displayedText = useTypewriter(message.text, showTypewriter);
   return (
     <motion.div
@@ -47,8 +47,8 @@ export default function Message({ message }) {
         className={`max-w-[75%] px-4 py-4 rounded-2xl shadow-sm text-sm font-medium transition-colors break-words
           ${
             isUser
-              ? "bg-zinc-500 text-white rounded-tr-md"
-              : "bg-gray-200 text-gray-900 rounded-tl-md"
+              ? "bg-indigo-500 text-white rounded-tr-md"
+              : "bg-gray-100 text-gray-900 rounded-tl-md"
           }
         `}
       >

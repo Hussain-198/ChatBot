@@ -27,7 +27,7 @@ export default function ChatInput({ onSend }) {
   };
 
   return (
-    <div className="flex items-center gap-2 p-3 border-t bg-white rounded-3xl">
+    <div className="flex items-center gap-2 p-3  bg-white rounded-3xl">
       <textarea
         ref={inputRef}
         className="flex-1 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-sm bg-gray-50 resize-none"
@@ -41,7 +41,7 @@ export default function ChatInput({ onSend }) {
       <motion.button
         whileTap={{ scale: 0.9 }}
         // whileHover={{ scale: 1.1 }}
-        className="p-2 rounded-xl bg-zinc-500 text-white hover:bg-zinc-600 active:bg-zinc-700 transition"
+        className="p-2 rounded-xl bg-indigo-500 text-white hover:bg-indigo-600 active:bg-indigo-700 transition"
         onClick={handleSend}
         aria-label="Send message"
       >
